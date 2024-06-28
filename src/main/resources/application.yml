@@ -5,3 +5,4 @@ spring:
 discord:
     id: ${application_id:}
     key: ${application_key:}
+    token: ${application_token:}

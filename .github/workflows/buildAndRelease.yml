@@ -68,7 +68,7 @@ jobs:
             docker pull lhamacorp/hellbot:latest
             docker stop hellbot || true
             docker rm hellbot || true
-            docker run -d --name hellbot -p 46532:8080 -e mongo=${{ secrets.APPLICATION_ID }} -e database=${{ secrets.APPLICATION_KEY }} lhamacorp/hellbot:latest
+            docker run -d --name hellbot -p 46532:8080 -e mongo=${{ secrets.APPLICATION_ID }} -e database=${{ secrets.APPLICATION_KEY }} -e database=${{ secrets.APPLICATION_TOKEN }} lhamacorp/hellbot:latest
 
   cleanup:
     name: Clean ups
