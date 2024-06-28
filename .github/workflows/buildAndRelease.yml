@@ -1,8 +1,5 @@
 name: Release
 
-env:
-  MONGO: ${{ secrets.MONGO }}
-
 on:
   push:
     branches: [ main ]
