@@ -1,0 +1,7 @@
+spring:
+  application:
+    name: hellbot
+
+discord:
+    id: ${application_id:}
+    key: ${application_key:}
