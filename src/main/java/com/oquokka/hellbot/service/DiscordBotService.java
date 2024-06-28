@@ -1,5 +1,6 @@
 package com.oquokka.hellbot.service;
 
+import com.oquokka.hellbot.event.UserActivityEvent;
 import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
 import net.dv8tion.jda.api.JDABuilder;
@@ -7,10 +8,10 @@ import net.dv8tion.jda.api.OnlineStatus;
 import net.dv8tion.jda.api.entities.Activity;
 import net.dv8tion.jda.api.events.guild.voice.GuildVoiceUpdateEvent;
 import net.dv8tion.jda.api.events.session.ReadyEvent;
-import net.dv8tion.jda.api.events.user.update.UserUpdateActivitiesEvent;
 import net.dv8tion.jda.api.events.user.update.UserUpdateOnlineStatusEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.dv8tion.jda.api.requests.GatewayIntent;
+import net.dv8tion.jda.api.utils.cache.CacheFlag;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -25,8 +26,10 @@ public class DiscordBotService extends ListenerAdapter {
     public void startBot() {
         JDABuilder.createDefault(botToken)
                 .enableIntents(GatewayIntent.GUILD_PRESENCES, GatewayIntent.GUILD_MEMBERS)
+                .addEventListeners(new UserActivityEvent())
                 .addEventListeners(this)
                 .setActivity(Activity.watching("the server"))
+                .enableCache(CacheFlag.ACTIVITY)
                 .build();
     }
 
@@ -40,13 +43,6 @@ public class DiscordBotService extends ListenerAdapter {
         if (event.getNewOnlineStatus() == OnlineStatus.ONLINE) {
             log.info("{} is online", event.getUser().getName());
         }
-    }
-
-    @Override
-    public void onUserUpdateActivities(UserUpdateActivitiesEvent event) {
-        String user = event.getUser().getName();
-        Activity activity = event.getNewValue().getFirst();
-        log.info("{} has activities {}", user, activity);
     }
 
     @Override
